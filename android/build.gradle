@@ -1,18 +1,27 @@
 buildscript {
     repositories {
-        google()
-        jcenter()
+        //google()
+        //jcenter()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}
+        //原文链接：https://blog.csdn.net/jinglinggg/java/article/details/105383270
+        maven { url "http://download.flutter.io" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
     }
 }
 
 allprojects {
     repositories {
-        google()
-        jcenter()
+        //google()
+        //jcenter()
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public'}
+        maven { url "http://download.flutter.io" }
     }
 }
 

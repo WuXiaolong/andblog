@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_andblog/andblog/common/color_common.dart';
 import 'package:flutter_andblog/andblog/common/http_common.dart';
+import 'package:flutter_andblog/andblog/detail/blog_detail_page.dart';
 import 'package:http/http.dart' as http;
 import 'blog.dart';
 
@@ -33,12 +34,22 @@ class BlogListPageState extends State<BlogListPage> {
 
   @override
   Widget build(BuildContext context) {
+    var content;
+    if (blogList.isEmpty) {
+      content = new Center(
+        // 可选参数 child:
+        child: new CircularProgressIndicator(),
+      );
+    } else {
+      content = new ListView(children: blogItem());
+    }
+
     return Scaffold(
       backgroundColor: ColorCommon.backgroundColor,
       appBar: AppBar(
         title: Text('AndBlog'),
       ),
-      body: blogItems(),
+      body: content,
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -46,68 +57,92 @@ class BlogListPageState extends State<BlogListPage> {
     );
   }
 
-  blogItems() {
-    var date = new Padding(
-        padding: const EdgeInsets.only(
-          top: 20.0,
-          left: 10.0,
-          right: 10.0,
+  blogItem() {
+    List<Widget> widgets = [];
+    for (int i = 0; i < blogList.length; i++) {
+      Blog blog = blogList[i];
+      var date = new Padding(
+          padding: const EdgeInsets.only(
+            top: 20.0,
+            left: 10.0,
+            right: 10.0,
+          ),
+          child: new Text(
+            blog.date,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: ColorCommon.dateColor, fontSize: 18),
+          ));
+
+      var cover = new Padding(
+          padding: const EdgeInsets.only(
+            top: 10.0,
+            left: 10.0,
+            right: 10.0,
+          ),
+          child: new ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  topRight: Radius.circular(10.0)),
+              child: new Image.network(
+                'http://pic1.win4000.com/wallpaper/2020-04-21/5e9e676001e20.jpg',
+              )));
+
+      var title = new Text(
+        blog.title,
+        style: TextStyle(color: ColorCommon.titleColor, fontSize: 22),
+      );
+
+      var summary = new Padding(
+          padding: const EdgeInsets.only(
+            top: 5.0,
+          ),
+          child: new Text(blog.summary,
+              textAlign: TextAlign.left,
+              style: TextStyle(color: ColorCommon.summaryColor, fontSize: 18)));
+
+      var titleSummary = new Container(
+        padding: const EdgeInsets.all(10.0),
+        alignment: Alignment.topLeft,
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10.0),
+              bottomRight: Radius.circular(10.0)),
+          shape: BoxShape.rectangle,
         ),
-        child: new Text(
-          '2020年6月28日 22:49',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: ColorCommon.dateColor, fontSize: 18),
-        ));
-
-    var cover = new Padding(
-        padding: const EdgeInsets.only(
-          top: 10.0,
-          left: 10.0,
-          right: 10.0,
+        margin: const EdgeInsets.only(left: 10, right: 10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[title, summary],
         ),
-        child: new ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                topRight: Radius.circular(10.0)),
-            child: new Image.network(
-              'http://pic1.win4000.com/wallpaper/2020-04-21/5e9e676001e20.jpg',
-            )));
+      );
 
-    var title = new Text(
-      'APP 开发从 0 到 1（一）需求与准备',
-      style: TextStyle(color: ColorCommon.titleColor, fontSize: 22),
-    );
+      var blogItem = new GestureDetector(
+        //点击事件
+        onTap: () => navigateToMovieDetailPage(blog.objectId, i),
 
-    var summary = new Padding(
-        padding: const EdgeInsets.only(
-          top: 5.0,
+        child: new Column(
+          children: <Widget>[
+            date,
+            cover,
+            titleSummary,
+          ],
         ),
-        child: new Text('一个人做一个项目，你也可以。',
-            textAlign: TextAlign.left,
-            style: TextStyle(color: ColorCommon.summaryColor, fontSize: 18)));
+      );
 
-    var titleSummary = new Container(
-      padding: const EdgeInsets.all(10.0),
-      alignment: Alignment.topLeft,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(10.0),
-            bottomRight: Radius.circular(10.0)),
-        shape: BoxShape.rectangle,
-      ),
-      margin: const EdgeInsets.only(left: 10, right: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[title, summary],
-      ),
-    );
 
-    var blogItem = new Column(
-      children: <Widget>[date, cover, titleSummary, date, cover, titleSummary],
-    );
+      widgets.add(blogItem);
+    }
+    return widgets;
+  }
 
-    return blogItem;
+  // 跳转页面
+  navigateToMovieDetailPage(String blogId, Object imageTag) {
+    Navigator
+        .of(context)
+        .push(new MaterialPageRoute(builder: (BuildContext context) {
+      return new BlogDetailPage(blogId, imageTag: imageTag);
+    }));
   }
 }

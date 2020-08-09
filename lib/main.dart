@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'andblog/detail/detail_page.dart';
+import 'andblog/detail/blog_detail_page.dart';
 import 'andblog/list/blog_list_page.dart';
 
 void main() {

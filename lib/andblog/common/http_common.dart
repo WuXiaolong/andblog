@@ -2,6 +2,8 @@ class HttpCommon{
 
   static var blog_list_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
 
+  static var blog_detail_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
+
   static Map<String, String> headers(){
     //设置header
     Map<String, String> headers = new Map();

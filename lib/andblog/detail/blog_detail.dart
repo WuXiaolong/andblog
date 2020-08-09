@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'dart:convert';
-//为了使实体类文件找到生成文件，需要 part 'detail.g.dart'
-part 'detail.g.dart';
+//为了使实体类文件找到生成文件，需要 part 'blog_detail.g.dart'
+part 'blog_detail.g.dart';
 
 @JsonSerializable()
 class Detail{
