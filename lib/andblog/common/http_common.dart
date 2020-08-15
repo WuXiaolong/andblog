@@ -1,6 +1,6 @@
 class HttpCommon{
 
-  static var blog_list_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
+  static var blog_list_url = 'https://api2.bmob.cn/1/classes/ArticleTable/?limit=8&order=-createdAt&skip=';
 
   static var blog_detail_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
 

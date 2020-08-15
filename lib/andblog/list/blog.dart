@@ -22,7 +22,6 @@ class Blog{
     List<Blog> blogList = new List<Blog>();
     var data = json.decode(jsonData);
     var results = data['results'];
-    print('results='+results[0]['content']);
     for (int i = 0; i < results.length; i++) {
       blogList.add(fromMap(results[i]));
     }
