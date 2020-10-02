@@ -4,6 +4,14 @@ class HttpCommon{
 
   static var blog_detail_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
 
+  static var login_url = 'https://api2.bmob.cn/1/login/?username=';
+
+  static var register_url = 'https://api2.bmob.cn/1/users';
+
+  static var comment_list_url = 'https://api2.bmob.cn/1/classes/CommentTable?include=commentUser&limit=8&order=-createdAt&skip=';
+
+  static var add_comment_url = 'https://api2.bmob.cn/1/classes/CommentTable';
+
   static Map<String, String> headers(){
     //设置header
     Map<String, String> headers = new Map();

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 
-import 'andblog/detail/blog_detail_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_andblog/andblog/login/user_info.dart';
+import 'package:provider/provider.dart';
+
 import 'andblog/list/blog_list_page.dart';
 
 void main() {
@@ -10,13 +12,17 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+        providers: [
+        ChangeNotifierProvider(create: (_)=>UserInfo())
+    ],
+    child:MaterialApp(
       title: 'AndBlog',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: new BlogListPage(),
-    );
+    ));
   }
 }

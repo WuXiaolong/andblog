@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_andblog/andblog/common/color_common.dart';
 import 'package:flutter_andblog/andblog/common/http_common.dart';
 import 'package:flutter_andblog/andblog/detail/blog_detail_page.dart';
+import 'package:flutter_andblog/andblog/login/user_info.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import '../home_drawer.dart';
 import 'blog.dart';
 
 class BlogListPage extends StatefulWidget {
@@ -14,7 +17,7 @@ class BlogListPageState extends State<BlogListPage> {
   List<Blog> _blogList = [];
   String loadMoreText = "没有更多数据";
   TextStyle loadMoreTextStyle =
-      new TextStyle(color: const Color(0xFF4483f6), fontSize: 14.0);
+  new TextStyle(color: const Color(0xFF999999), fontSize: 14.0);
   ScrollController scrollController = new ScrollController();
   var hasData = true;
   var page = 0;
@@ -24,10 +27,13 @@ class BlogListPageState extends State<BlogListPage> {
     super.initState();
     //一进页面就请求接口
     _getBlogListData();
+
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
+        //已经滑到底了
         if (hasData) {
+          //还有数据，加载下一页
           setState(() {
             loadMoreText = "正在加载中...";
             loadMoreTextStyle =
@@ -55,6 +61,8 @@ class BlogListPageState extends State<BlogListPage> {
 
   //网络请求
   Future _getBlogListData() async {
+
+    //一页加载8条数据，skip为跳过的数据，比如加载第二页（page=1），skip跳过前8条数据，即显示第9-16条数据
     var skip = page * 8;
     print("blog_list_url=" + HttpCommon.blog_list_url + skip.toString());
     var response = await http.get(HttpCommon.blog_list_url + skip.toString(),
@@ -64,6 +72,7 @@ class BlogListPageState extends State<BlogListPage> {
       setState(() {
         var data = Blog.decodeData(response.body);
         if (data.length < 8) {
+          //某页数据小于8，表明没有下一页了
           hasData = false;
         } else {
           hasData = true;
@@ -90,15 +99,60 @@ class BlogListPageState extends State<BlogListPage> {
     return Scaffold(
       backgroundColor: ColorCommon.backgroundColor,
       appBar: AppBar(
-        title: Text('AndBlog'),
+        title: Text("菜鸟博客"),
+        actions: <Widget>[
+          // 非隐藏的菜单
+//          new IconButton(
+//              icon: new Icon(Icons.account_box),
+//              tooltip: 'Add Alarm',
+//              onPressed: () {}
+//          ),
+          // 隐藏的菜单
+//          new PopupMenuButton<String>(
+//            itemBuilder: (BuildContext context) => <PopupMenuItem<String>>[
+//              this.SelectView(Icons.android, '我的', 'A'),
+//              this.SelectView(Icons.account_circle, '关于', 'B'),
+//            ],
+//            onSelected: (String action) {
+//              // 点击选项的时候
+//              switch (action) {
+//                case 'A': break;
+//                case 'B': break;
+//                case 'C': break;
+//              }
+//            },
+//          ),
+        ],
+      ),
+      drawer: new Drawer(
+        child: new HomeDrawerBuilder(context).homeDrawer(context),
       ),
       body: content,
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+//      floatingActionButton: FloatingActionButton(
+//        tooltip: 'Increment',
+//        child: Icon(Icons.account_box),
+//        onPressed: () {
+//          print("FloatingActionButton");
+//        },
+//        elevation: 30,
+//      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  // 返回每个隐藏的菜单项
+//  SelectView(IconData icon, String text, String id) {
+//    return new PopupMenuItem<String>(
+//        value: id,
+//        child: new Row(
+//          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//          children: <Widget>[
+//            new Icon(icon, color: Colors.blue),
+//            new Text(text),
+//          ],
+//        )
+//    );
+//  }
 
   Widget _contentList() {
     print("_blogList.length=" + _blogList.length.toString());
