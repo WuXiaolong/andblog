@@ -202,7 +202,7 @@ class BlogListPageState extends State<BlogListPage> {
         child: new Text(
           blog.date,
           textAlign: TextAlign.center,
-          style: TextStyle(color: ColorCommon.dateColor, fontSize: 18),
+          style: TextStyle(color: ColorCommon.dateColor, fontSize: 16),
         ));
 
     var cover = new Padding(
@@ -216,12 +216,14 @@ class BlogListPageState extends State<BlogListPage> {
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0)),
             child: new Image.network(
-              'http://pic1.win4000.com/wallpaper/2020-04-21/5e9e676001e20.jpg',
+              blog.cover,
+              fit: BoxFit.cover,
+              width: double.infinity,
             )));
 
     var title = new Text(
       blog.title,
-      style: TextStyle(color: ColorCommon.titleColor, fontSize: 22),
+      style: TextStyle(color: ColorCommon.titleColor, fontSize: 18),
     );
 
     var summary = new Padding(
@@ -230,7 +232,7 @@ class BlogListPageState extends State<BlogListPage> {
         ),
         child: new Text(blog.summary,
             textAlign: TextAlign.left,
-            style: TextStyle(color: ColorCommon.summaryColor, fontSize: 18)));
+            style: TextStyle(color: ColorCommon.summaryColor, fontSize: 16)));
 
     var titleSummary = new Container(
       padding: const EdgeInsets.all(10.0),

@@ -24,7 +24,7 @@ class BlogCommentPage extends StatefulWidget {
 class BlogListPageState extends State<BlogCommentPage> {
   String blogId;
   String blogTitle;
-  List<Comment> _commentList = [];
+  List<Comment> _commentList=[];
   String loadMoreText = "没有更多数据";
   TextStyle loadMoreTextStyle =
       new TextStyle(color: const Color(0xFF999999), fontSize: 14.0);
@@ -82,12 +82,11 @@ class BlogListPageState extends State<BlogCommentPage> {
         HttpCommon.comment_list_url +
         skip.toString() +
          '&where={"blogId":"'+blogId+'"}');
-
-    String name = "XiaoMing";
-    print("My name is ${name}");
     var response = await http.get(
-        HttpCommon.comment_list_url + skip.toString() + '&where={"blogId":"'+blogId+'"}',
+        HttpCommon.comment_list_url + skip.toString()
+            + '&where={"blogId":"'+blogId+'"}',
         headers: HttpCommon.headers());
+    print('statusCode='+response.statusCode.toString());
     if (response.statusCode == 200) {
       // setState 相当于 runOnUiThread
       setState(() {
@@ -98,7 +97,6 @@ class BlogListPageState extends State<BlogCommentPage> {
         } else {
           hasData = true;
         }
-
         _commentList.addAll(data);
       });
     }
@@ -106,17 +104,26 @@ class BlogListPageState extends State<BlogCommentPage> {
 
   @override
   Widget build(BuildContext context) {
+
+
     var content;
 
     if (_commentList.length == 0) {
+      if(hasData){
       content = new Center(
         // 可选参数 child:
         child: new CircularProgressIndicator(),
-      );
+      );}
+      else{
+        content = new Center(
+          // 可选参数 child:
+          child: Text('无评论数据'),
+        );
+      }
     } else {
       content = _contentList();
     }
-
+    print('BuildContext='+hasData.toString());
     return Scaffold(
       backgroundColor: ColorCommon.backgroundColor,
       appBar: AppBar(

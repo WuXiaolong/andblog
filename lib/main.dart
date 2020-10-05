@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     ],
     child:MaterialApp(
       title: 'AndBlog',
+      debugShowCheckedModeBanner: false,//去除右上角Debug标签
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

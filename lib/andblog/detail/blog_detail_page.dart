@@ -3,10 +3,15 @@ import 'dart:io';
 
 import 'package:animated_floatactionbuttons/animated_floatactionbuttons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_andblog/andblog/collection/add_collection_article.dart';
 import 'package:flutter_andblog/andblog/comment/blog_comment_page.dart';
 import 'package:flutter_andblog/andblog/common/http_common.dart';
+import 'package:flutter_andblog/andblog/common/shared_preferences_common.dart';
+import 'package:flutter_andblog/andblog/login/login_page.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:syntax_highlighter/syntax_highlighter.dart';
 
 import 'blog_detail.dart';
 import 'my_markdown_style.dart';
@@ -87,29 +92,25 @@ class BlogDetailPageState extends State<BlogDetailPage> {
   }
 
   setContent() {
-    var head = new Markdown(
+    var content = new Markdown(
       controller: ScrollController(),
       selectable: true,
       data: detail.content,
-      imageDirectory: 'https://raw.githubusercontent.com',
-      styleSheet: new MyMarkdownStyle(
-          h2: new TextStyle(fontSize: 34)
+      // fitContent:true,
+      syntaxHighlighter: new HighLight(),
+      // imageDirectory: 'https://raw.githubusercontent.com',
+      styleSheet: new MarkdownStyleSheet(
+          p: new TextStyle(fontSize: 16),
+          h2: new TextStyle(color: Colors.blue,fontSize: 24),
+          // img:new TextStyle(width:double.infinity),
       ),
-
-    );
-
-    var content= ListView.builder(
-      shrinkWrap: true,
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index) {
-          // return the header
-          return ListTile(title: new Column(children: <Widget>[head,Text("$index")],));
-
+      onTapLink: (url){
+        // 获取点击链接，可以使用webview展示
+        print(url);
       },
     );
 
-
-    return head;
+    return content;
   }
 
   // 跳转页面
@@ -137,7 +138,23 @@ class BlogDetailPageState extends State<BlogDetailPage> {
   Widget float2() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
+        onPressed: (){
+
+          SharedPreferencesCommon.isLogin().then((value) {
+            print("isLogin=" + value.toString());
+            if (value!=null&&value) {
+
+              isCollection();
+            } else {
+              Navigator.of(context)
+                  .push(new MaterialPageRoute(builder: (BuildContext context) {
+                return new LoginPage();
+              }));
+            }
+          });
+
+
+        },
         heroTag: "btn2",
         tooltip: 'Second button',
         child: Icon(Icons.collections),
@@ -145,15 +162,91 @@ class BlogDetailPageState extends State<BlogDetailPage> {
       ),
     );
   }
-//    Widget float3() {
-//      return Container(
-//        child: FloatingActionButton(
-//          onPressed: null,
-//          heroTag: "btn2",
-//          tooltip: 'Second button',
-//          child: Icon(Icons.add),
-//          elevation: 1,
-//        ),
-//      );
+
+   addCollection() {
+    SharedPreferencesCommon.getUserId().then((value) {
+      String userId=value.toString();
+
+      //设置header
+      Map<String, Object> registerBody = new Map();
+      registerBody["collectionUserId"] = userId;
+      registerBody["collectionArticleId"] = blogId;
+      registerBody["collectionArticle"] =
+          new AddCollectionArticle("Pointer", "ArticleTable", blogId).toJson();
+
+      addCollectionData(registerBody);
+
+
+    });
+
+
+
+
+  }
+
+  //网络请求
+  addCollectionData(Map<String, Object> registerBody) async {
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.post(HttpCommon.add_collection_url,
+        headers: HttpCommon.headers(), body: json.encode(registerBody));
+    print('statusCode=' + response.statusCode.toString());
+    if (response.statusCode == 201) {
+      Fluttertoast.showToast(
+          msg: "收藏成功",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+      // _showDialog();
+    } else {
+      Fluttertoast.showToast(
+          msg: "收藏失败",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+    }
+  }
+
+  isCollection() {
+    SharedPreferencesCommon.getUserId().then((value) {
+      String userId=value.toString();
+
+      isCollectionData( userId);
+
+
+    });
+
+
+
+
+  }
+
+  //网络请求
+  isCollectionData(String userId) async {
+    // Await the http get response, then decode the json-formatted response.
+    var response = await http.get(HttpCommon.iscollection_url+blogId+'","collectionUserId":"'+userId+'"}',
+        headers: HttpCommon.headers());
+    print('url=' + HttpCommon.iscollection_url+blogId+'","collectionUserId":"'+userId+'"}');
+    print('statusCode=' + response.statusCode.toString());
+    print('body=' + response.body.toString());
+    if (response.statusCode == 200) {
+
+      int count=json.decode(response.body)["count"];
+      if(count==1){
+        Fluttertoast.showToast(
+            msg: "已经收藏",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER);
+      }else{
+        addCollection();
+      }
+
+      // _showDialog();
+    } else {
+      Fluttertoast.showToast(
+          msg: "收藏失败",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+    }
+  }
+
+
   }
 

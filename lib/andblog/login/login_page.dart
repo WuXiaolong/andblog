@@ -20,7 +20,6 @@ class LoginPageState extends State<LoginPage> {
   //定义一个controller
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +52,7 @@ class LoginPageState extends State<LoginPage> {
       body: Column(
         children: <Widget>[
           TextField(
-            autofocus: true,
+            autofocus: false,
             controller: _userNameController, //设置controller
             decoration: InputDecoration(
               labelText: "用户名",
@@ -67,7 +66,7 @@ class LoginPageState extends State<LoginPage> {
                 labelText: "密码",
                 hintText: "您的登录密码",
                 prefixIcon: Icon(Icons.lock)),
-            obscureText: true,
+            // obscureText: true,
           ),
           FlatButton(
             color: Colors.blue,

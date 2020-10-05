@@ -1,6 +1,6 @@
-class HttpCommon{
-
-  static var blog_list_url = 'https://api2.bmob.cn/1/classes/ArticleTable/?limit=8&order=-createdAt&skip=';
+class HttpCommon {
+  static var blog_list_url =
+      'https://api2.bmob.cn/1/classes/ArticleTable/?limit=8&order=-createdAt&skip=';
 
   static var blog_detail_url = 'https://api2.bmob.cn/1/classes/ArticleTable/';
 
@@ -8,11 +8,21 @@ class HttpCommon{
 
   static var register_url = 'https://api2.bmob.cn/1/users';
 
-  static var comment_list_url = 'https://api2.bmob.cn/1/classes/CommentTable?include=commentUser&limit=8&order=-createdAt&skip=';
+  static var comment_list_url =
+      'https://api2.bmob.cn/1/classes/CommentTable?include=commentUser&limit=8&order=-createdAt&skip=';
 
   static var add_comment_url = 'https://api2.bmob.cn/1/classes/CommentTable';
 
-  static Map<String, String> headers(){
+  static var collection_list_url =
+      'https://api2.bmob.cn/1/classes/CollectionTable?include=collectionArticle&limit=8&order=-createdAt&skip=';
+
+  static var add_collection_url =
+      'https://api2.bmob.cn/1/classes/CollectionTable';
+
+  static var iscollection_url =
+      'https://api2.bmob.cn/1/classes/CollectionTable?limit=0&count=1&where={"collectionArticleId":"';
+
+  static Map<String, String> headers() {
     //设置header
     Map<String, String> headers = new Map();
     headers["X-Bmob-Application-Id"] = "b2190c8fae9e79f86c2ebf19869a66c6";
@@ -20,5 +30,4 @@ class HttpCommon{
     headers["Content-Type"] = "application/json";
     return headers;
   }
-
 }

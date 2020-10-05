@@ -30,7 +30,12 @@ dependencies:
   cupertino_icons: ^0.1.3
   http: ^0.12.1
   json_annotation: ^3.0.1
-  flutter_markdown: ^0.4.2
+  flutter_markdown: ^0.4.4
+  syntax_highlighter: ^0.1.1
+  animated_floatactionbuttons: ^0.1.0
+  shared_preferences: ^0.5.10 #https://pub.dev/packages/shared_preferences
+  fluttertoast: ^7.1.1 #https://pub:dev/packages/fluttertoast/
+  provider: ^4.3.2+2 #https://pub.dev/packages/provider/
 
 dev_dependencies:
   flutter_test:
