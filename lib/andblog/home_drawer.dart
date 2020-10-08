@@ -8,7 +8,6 @@ import 'common/color_common.dart';
 import 'common/shared_preferences_common.dart';
 
 class HomeDrawerBuilder {
-  static UserAccountsDrawerHeader userAccountsDrawerHeader;
   BuildContext context;
   bool isLogin;
 
@@ -53,7 +52,7 @@ class HomeDrawerBuilder {
         builder: (BuildContext context) {
           return  AlertDialog(
               title: new Text("菜鸟博客"),
-              content: new Text("每天精选一篇博客。"),
+              content: new Text("每天精选一篇博客，每天早晨花10分钟阅读一篇文章，一个月可以有大约50000字的阅读量，一年有近60万字的阅读量，专注、执着，每天阅读。"),
               actions: <Widget>[
                 new FlatButton(
                   child: new Text("OK"),
@@ -90,7 +89,7 @@ class HomeDrawerBuilder {
   }
 
   static Widget _drawerHeader(BuildContext context) {
-    userAccountsDrawerHeader = new UserAccountsDrawerHeader(
+    UserAccountsDrawerHeader  userAccountsDrawerHeader = new UserAccountsDrawerHeader(
       accountName: new Text("${Provider.of<UserInfo>(context).userName}",
           style: TextStyle(color: Colors.white, fontSize: 22)),
       currentAccountPicture: new CircleAvatar(

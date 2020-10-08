@@ -66,7 +66,7 @@ class LoginPageState extends State<LoginPage> {
                 labelText: "密码",
                 hintText: "您的登录密码",
                 prefixIcon: Icon(Icons.lock)),
-            // obscureText: true,
+            obscureText: true,
           ),
           FlatButton(
             color: Colors.blue,
